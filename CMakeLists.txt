@@ -17,6 +17,11 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
+if(NOT TARGET yaml-cpp::yaml-cpp)
+  add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+endif()
+
+
 add_library(${PROJECT_NAME} SHARED
   src/so_arm_100_interface.cpp
 )
