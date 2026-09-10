@@ -30,32 +30,32 @@ SOARM100Interface::~SOARM100Interface()
     }
 }
 
-CallbackReturn SOARM100Interface::on_init(const hardware_interface::HardwareComponentInterfaceParams & params)
+CallbackReturn SOARM100Interface::on_init(const hardware_interface::HardwareInfo & hardware_info)
 {
-    CallbackReturn result = hardware_interface::SystemInterface::on_init(params);
+    CallbackReturn result = hardware_interface::SystemInterface::on_init(hardware_info);
     if (result != CallbackReturn::SUCCESS)
     {
         return result;
     }
 
-    use_serial_ = params.hardware_info.hardware_parameters.count("use_serial") ?
-        (params.hardware_info.hardware_parameters.at("use_serial") == "true") : false;
+    use_serial_ = hardware_info.hardware_parameters.count("use_serial") ?
+        (hardware_info.hardware_parameters.at("use_serial") == "true") : false;
     
-    serial_port_ = params.hardware_info.hardware_parameters.count("serial_port") ?
-        params.hardware_info.hardware_parameters.at("serial_port") : "/dev/ttyUSB0";
+    serial_port_ = hardware_info.hardware_parameters.count("serial_port") ?
+        hardware_info.hardware_parameters.at("serial_port") : "/dev/ttyUSB0";
     
-    serial_baudrate_ = params.hardware_info.hardware_parameters.count("serial_baudrate") ?
-        std::stoi(params.hardware_info.hardware_parameters.at("serial_baudrate")) : 1000000;
+    serial_baudrate_ = hardware_info.hardware_parameters.count("serial_baudrate") ?
+        std::stoi(hardware_info.hardware_parameters.at("serial_baudrate")) : 1000000;
 
-    servo_speed_ = params.hardware_info.hardware_parameters.count("servo_speed") ?
-        std::stoi(params.hardware_info.hardware_parameters.at("servo_speed")) : 2400;
+    servo_speed_ = hardware_info.hardware_parameters.count("servo_speed") ?
+        std::stoi(hardware_info.hardware_parameters.at("servo_speed")) : 2400;
 
-    servo_acceleration_ = params.hardware_info.hardware_parameters.count("servo_acceleration") ?
-        std::stoi(params.hardware_info.hardware_parameters.at("servo_acceleration")) : 50;
+    servo_acceleration_ = hardware_info.hardware_parameters.count("servo_acceleration") ?
+        std::stoi(hardware_info.hardware_parameters.at("servo_acceleration")) : 50;
 
     // Default control mode: 0=position, 1=velocity, 2=effort/PWM
-    default_control_mode_ = params.hardware_info.hardware_parameters.count("control_mode") ?
-        std::stoi(params.hardware_info.hardware_parameters.at("control_mode")) : 0;
+    default_control_mode_ = hardware_info.hardware_parameters.count("control_mode") ?
+        std::stoi(hardware_info.hardware_parameters.at("control_mode")) : 0;
 
     size_t num_joints = info_.joints.size();
     position_commands_.resize(num_joints, 0.0);
